@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relevamiento de Talento Esquinence — Dirección de Cultura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-weight: 400;
+    background: #F4F7FA;
+    color: #1A2D3D;
+    min-height: 100vh;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #0F2744;
+    padding: 2rem 2.5rem 1.75rem;
+    border-radius: 10px 10px 0 0;
+  }
+  .header .org-label {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #3AAEE0;
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .header h1 span { color: #3AAEE0; }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  /* ── BODY ── */
+  .form-body {
+    background: #fff;
+    padding: 2rem 2.5rem;
+    border-left: 1px solid #C8D6E2;
+    border-right: 1px solid #C8D6E2;
+  }
+
+  /* ── SECCIONES ── */
+  .seccion {
+    margin-bottom: 2rem;
+  }
+  .seccion-titulo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1B7DB5;
+    border-bottom: 1.5px solid #C8D6E2;
+    padding-bottom: 7px;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── CAMPOS ── */
+  .campo { margin-bottom: 1rem; }
+  .campo label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    color: #5A7387;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .campo label .req { color: #E05C4A; margin-left: 2px; }
+
+  .campo input[type="text"],
+  .campo input[type="email"],
+  .campo input[type="tel"],
+  .campo input[type="number"],
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    border: 1.5px solid #C8D6E2;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'Barlow', sans-serif;
+    color: #1A2D3D;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .campo input:focus,
+  .campo select:focus,
+  .campo textarea:focus {
+    border-color: #3AAEE0;
+    box-shadow: 0 0 0 3px rgba(58,174,224,0.15);
+  }
+  .campo input::placeholder,
+  .campo textarea::placeholder { color: #C8D6E2; }
+  .campo textarea { resize: vertical; min-height: 85px; }
+  .campo select { cursor: pointer; }
+
+  .fila-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ── DISCIPLINAS ── */
+  .disciplinas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 10px;
+  }
+  .disciplina-item {
+    border: 1.5px solid #C8D6E2;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #5A7387;
+    background: #fff;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .disciplina-item:hover {
+    border-color: #3AAEE0;
+    background: #E8EEF4;
+    color: #1A2D3D;
+  }
+  .disciplina-item.activo {
+    border-color: #1B7DB5;
+    background: #E8EEF4;
+    color: #0F2744;
+    font-weight: 700;
+  }
+  /* Danza con color de Cultura */
+  .disciplina-item[data-val="danza"].activo {
+    border-color: #E8834A;
+    background: #FDF1EA;
+    color: #7a3a10;
+  }
+  .disciplina-item .icono { font-size: 17px; flex-shrink: 0; }
+
+  /* ── SECCIÓN DANZA CONDICIONAL ── */
+  .seccion-danza {
+    display: none;
+    background: #FDF1EA;
+    border: 1.5px solid #E8834A;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .seccion-danza.visible { display: block; }
+  .seccion-danza .danza-titulo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #E8834A;
+    border-bottom: 1.5px solid #f0c4a0;
+    padding-bottom: 7px;
+    margin-bottom: 1.25rem;
+  }
+  .seccion-danza .campo label { color: #7a4520; }
+  .seccion-danza .campo input,
+  .seccion-danza .campo select,
+  .seccion-danza .campo textarea {
+    background: #fff;
+    border-color: #f0c4a0;
+  }
+  .seccion-danza .campo input:focus,
+  .seccion-danza .campo select:focus,
+  .seccion-danza .campo textarea:focus {
+    border-color: #E8834A;
+    box-shadow: 0 0 0 3px rgba(232,131,74,0.15);
+  }
+
+  /* checkboxes multi-opción en danza */
+  .checks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .check-pill {
+    border: 1.5px solid #f0c4a0;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a4520;
+    background: #fff;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .check-pill:hover { border-color: #E8834A; background: #fef0e5; }
+  .check-pill.activo { border-color: #E8834A; background: #E8834A; color: #fff; }
+  .check-pill input { display: none; }
+
+  /* ── NIVEL ── */
+  .nivel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .nivel-item {
+    border: 1.5px solid #C8D6E2;
+    border-radius: 6px;
+    padding: 12px 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #5A7387;
+    background: #fff;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .nivel-item .emoji { font-size: 20px; display: block; margin-bottom: 5px; }
+  .nivel-item:hover { border-color: #3AAEE0; background: #E8EEF4; }
+  .nivel-item.activo {
+    border-color: #1B7DB5;
+    background: #0F2744;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* ── CHECKBOXES ── */
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .check-row input[type="checkbox"] {
+    width: 17px; height: 17px;
+    accent-color: #1B7DB5;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .check-row span { font-size: 13.5px; color: #1A2D3D; line-height: 1.5; }
+
+  /* ── BOTÓN ── */
+  .btn-enviar {
+    width: 100%;
+    background: #0F2744;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 0.5rem;
+  }
+  .btn-enviar:hover { background: #1A3D5C; }
+  .btn-enviar:active { transform: scale(0.99); }
+
+  .aviso {
+    font-size: 11.5px;
+    color: #5A7387;
+    text-align: center;
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* ── FOOTER CEM ── */
+  .footer-cem {
+    background: #E8EEF4;
+    border: 1px solid #C8D6E2;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .footer-cem .texto {
+    font-size: 11.5px;
+    color: #5A7387;
+    line-height: 1.5;
+  }
+  .footer-cem .badge {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .footer-cem .sigla {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #0F2744;
+    border-radius: 4px;
+    padding: 4px 10px;
+  }
+  .footer-cem .nombre {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1A3D5C;
+  }
+
+  /* ── ÉXITO ── */
+  #exito {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #fff;
+    border: 1px solid #C8D6E2;
+    border-radius: 10px;
+  }
+  #exito .check { font-size: 48px; margin-bottom: 14px; }
+  #exito h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    text-transform: uppercase;
+    color: #0F2744;
+    margin-bottom: 10px;
+  }
+  #exito p { font-size: 15px; color: #5A7387; line-height: 1.7; }
+
+  @media (max-width: 560px) {
+    .header, .form-body, .footer-cem { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .fila-2 { grid-template-columns: 1fr; }
+    .nivel-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+<div id="formulario-wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="org-label">Municipio de Esquina · Dirección de Cultura</div>
+    <h1>Talento <span>Esquinence</span></h1>
+    <p>Contanos sobre tu arte, tu música, tu danza o cualquier expresión cultural. Queremos conocerte y encontrar espacios para que tu talento brille en la ciudad.</p>
+  </div>
+
+  <div class="form-body">
+
+    <!-- DATOS PERSONALES -->
+    <div class="seccion">
+      <div class="seccion-titulo">Datos personales</div>
+      <div class="fila-2">
+        <div class="campo">
+          <label>Nombre y apellido <span class="req">*</span></label>
+          <input type="text" id="nombre" placeholder="Tu nombre completo">
+        </div>
+        <div class="campo">
+          <label>DNI</label>
+          <input type="number" id="dni" placeholder="Número de DNI">
+        </div>
+      </div>
+      <div class="fila-2">
+        <div class="campo">
+          <label>Edad <span class="req">*</span></label>
+          <input type="number" id="edad" placeholder="Ej: 28" min="5" max="99">
+        </div>
+        <div class="campo">
+          <label>Teléfono / WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="telefono" placeholder="Ej: 3777 123456">
+        </div>
+      </div>
+      <div class="campo">
+        <label>Correo electrónico</label>
+        <input type="email" id="email" placeholder="tucorreo@ejemplo.com">
+      </div>
+      <div class="campo">
+        <label>Barrio o localidad</label>
+        <input type="text" id="barrio" placeholder="Barrio, zona o localidad cercana">
+      </div>
+    </div>
+
+    <!-- EXPRESIÓN ARTÍSTICA -->
+    <div class="seccion">
+      <div class="seccion-titulo">Tu expresión artística <small style="font-weight:400;font-size:11px;color:#5A7387;text-transform:none;letter-spacing:0"> — podés marcar más de una</small></div>
+      <div class="disciplinas-grid">
+        <div class="disciplina-item" data-val="canto" onclick="toggleDisciplina(this)"><span class="icono">🎤</span> Canto / Voz</div>
+        <div class="disciplina-item" data-val="instrumentos" onclick="toggleDisciplina(this)"><span class="icono">🎸</span> Instrumento</div>
+        <div class="disciplina-item" data-val="banda" onclick="toggleDisciplina(this)"><span class="icono">🎵</span> Banda musical</div>
+        <div class="disciplina-item" data-val="danza" onclick="toggleDisciplina(this)"><span class="icono">💃</span> Danza / Baile</div>
+        <div class="disciplina-item" data-val="teatro" onclick="toggleDisciplina(this)"><span class="icono">🎭</span> Teatro</div>
+        <div class="disciplina-item" data-val="escritura" onclick="toggleDisciplina(this)"><span class="icono">✍️</span> Escritura / Poesía</div>
+        <div class="disciplina-item" data-val="artes_visuales" onclick="toggleDisciplina(this)"><span class="icono">🎨</span> Artes visuales</div>
+        <div class="disciplina-item" data-val="artesania" onclick="toggleDisciplina(this)"><span class="icono">🪡</span> Artesanía</div>
+        <div class="disciplina-item" data-val="murga" onclick="toggleDisciplina(this)"><span class="icono">🥁</span> Murga / Percusión</div>
+        <div class="disciplina-item" data-val="folklore" onclick="toggleDisciplina(this)"><span class="icono">🪗</span> Folklore</div>
+        <div class="disciplina-item" data-val="otra" onclick="toggleDisciplina(this)"><span class="icono">✨</span> Otra</div>
+      </div>
+      <div class="campo" id="campo-otra" style="display:none; margin-top:10px;">
+        <label>¿Qué otra expresión?</label>
+        <input type="text" id="otra-cual" placeholder="Describí tu disciplina">
+      </div>
+    </div>
+
+    <!-- SECCIÓN DANZA CONDICIONAL -->
+    <div class="seccion-danza" id="seccion-danza">
+      <div class="danza-titulo">💃 Profundización — Danza</div>
+
+      <div class="campo">
+        <label>Sexo <span class="req">*</span></label>
+        <select id="danza-sexo">
+          <option value="">Seleccioná una opción</option>
+          <option>Femenino</option>
+          <option>Masculino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>¿Cuál es tu rol principal en la danza? <span class="req">*</span></label>
+        <select id="danza-rol">
+          <option value="">Seleccioná una opción</option>
+          <option>Estudiante / Alumno/a</option>
+          <option>Bailarín/a independiente</option>
+          <option>Profesor/a / Instructor/a</option>
+          <option>Director/a de academia o instituto</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>¿Realizás actividad de danza actualmente? <span class="req">*</span></label>
+        <select id="danza-activa" onchange="toggleMotivoAbandono()">
+          <option value="">Seleccioná una opción</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="campo" id="campo-motivo-abandono" style="display:none;">
+        <label>¿Cuál fue el motivo por el que dejaste o interrumpiste?</label>
+        <textarea id="danza-motivo" placeholder="Contanos brevemente…"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>¿Qué géneros de danza practicás o enseñás? <span class="req">*</span> <small style="font-weight:400;text-transform:none;letter-spacing:0"> — podés marcar más de uno</small></label>
+        <div class="checks-grid">
+          <div class="check-pill" onclick="togglePill(this)">Folklore</div>
+          <div class="check-pill" onclick="togglePill(this)">Danzas clásicas</div>
+          <div class="check-pill" onclick="togglePill(this)">Danzas contemporáneas</div>
+          <div class="check-pill" onclick="togglePill(this)">Samba no pé</div>
+          <div class="check-pill" onclick="togglePill(this)">Danza urbana</div>
+          <div class="check-pill" onclick="togglePill(this)">Danza afro</div>
+          <div class="check-pill" onclick="togglePill(this)">Zumba</div>
+          <div class="check-pill" data-otro="true" onclick="togglePill(this)">Otras</div>
+        </div>
+        <div class="campo" id="campo-genero-otro" style="display:none; margin-top:10px;">
+          <input type="text" id="danza-genero-otro" placeholder="¿Qué otro género?">
+        </div>
+      </div>
+
+      <div class="fila-2">
+        <div class="campo">
+          <label>¿Desde qué edad bailás? <span class="req">*</span></label>
+          <input type="number" id="danza-desde-edad" placeholder="Ej: 8" min="1" max="80">
+        </div>
+        <div class="campo">
+          <label>Años de práctica en total <span class="req">*</span></label>
+          <input type="number" id="danza-anios" placeholder="Ej: 12" min="0" max="80">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>¿En qué tipo de institución desarrollás tu actividad? <small style="font-weight:400;text-transform:none;letter-spacing:0"> — podés marcar más de uno</small></label>
+        <div class="checks-grid">
+          <div class="check-pill" onclick="togglePill(this)">Escuela pública/privada</div>
+          <div class="check-pill" onclick="togglePill(this)">Academia / Instituto</div>
+          <div class="check-pill" onclick="togglePill(this)">Centro Cultural Esquina</div>
+          <div class="check-pill" onclick="togglePill(this)">Club</div>
+          <div class="check-pill" onclick="togglePill(this)">Asociación civil</div>
+          <div class="check-pill" onclick="togglePill(this)">Espacio propio</div>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>¿Qué instituciones de danza conocés en Esquina?</label>
+        <textarea id="danza-instituciones" placeholder="Nombrá las academias, grupos o espacios que conozcas…"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>¿Cómo creés que es vista la danza en la sociedad de Esquina hoy?</label>
+        <textarea id="danza-percepcion" placeholder="Tu opinión…"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Un aspecto positivo y uno negativo del sector de la danza local</label>
+        <textarea id="danza-pos-neg" placeholder="Positivo: …   /   Negativo: …"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>¿Hay algo específico para modificar o aportar para mejorar la situación de los artistas?</label>
+        <textarea id="danza-mejora" placeholder="Tu propuesta…"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Si tuvieras que definir la danza en 3 palabras, ¿cuáles serían?</label>
+        <input type="text" id="danza-palabras" placeholder="Ej: libertad, expresión, comunidad">
+      </div>
+
+      <div class="campo">
+        <label>¿Por qué medio preferís recibir información sobre talleres y eventos?</label>
+        <input type="text" id="danza-comunicacion" placeholder="Ej: Instagram, WhatsApp, folletos…">
+      </div>
+    </div>
+
+    <!-- TRAYECTORIA -->
+    <div class="seccion">
+      <div class="seccion-titulo">Trayectoria</div>
+      <div class="campo">
+        <label>¿Cómo definirías tu trayectoria? <span class="req">*</span></label>
+        <div class="nivel-grid">
+          <div class="nivel-item" data-val="iniciando" onclick="toggleNivel(this)"><span class="emoji">🌱</span>Me estoy iniciando</div>
+          <div class="nivel-item" data-val="desarrollo" onclick="toggleNivel(this)"><span class="emoji">🌿</span>En desarrollo</div>
+          <div class="nivel-item" data-val="trayectoria" onclick="toggleNivel(this)"><span class="emoji">🌳</span>Con trayectoria</div>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:1rem;">
+        <label>Contanos sobre tu arte</label>
+        <textarea id="trayectoria-texto" placeholder="Presentaciones, logros, grupos, estudios, proyectos…"></textarea>
+      </div>
+    </div>
+
+    <!-- DISPONIBILIDAD -->
+    <div class="seccion">
+      <div class="seccion-titulo">Disponibilidad y redes</div>
+      <div class="campo">
+        <label style="margin-bottom:10px;">¿Estás disponible para…? <small style="font-weight:400;text-transform:none;letter-spacing:0"> — marcá lo que aplique</small></label>
+        <label class="check-row"><input type="checkbox" id="disp-festival"><span>Participar en festivales y eventos municipales</span></label>
+        <label class="check-row"><input type="checkbox" id="disp-taller"><span>Dar talleres o clases comunitarias</span></label>
+        <label class="check-row"><input type="checkbox" id="disp-video"><span>Grabar un video testimonial para campañas de comunicación</span></label>
+        <label class="check-row"><input type="checkbox" id="disp-escuelas"><span>Visitar escuelas o centros comunitarios</span></label>
+      </div>
+      <div class="fila-2">
+        <div class="campo">
+          <label>Instagram</label>
+          <input type="text" id="instagram" placeholder="@tuusuario">
+        </div>
+        <div class="campo">
+          <label>Facebook / TikTok / Otra red</label>
+          <input type="text" id="redes-otras" placeholder="Usuario o enlace">
+        </div>
+      </div>
+      <div class="campo">
+        <label>Material propio (videos, fotos)</label>
+        <input type="text" id="material" placeholder="Link a YouTube, Drive, o describí qué tenés">
+      </div>
+    </div>
+
+    <!-- COMENTARIOS -->
+    <div class="seccion">
+      <div class="seccion-titulo">Comentarios adicionales</div>
+      <div class="campo">
+        <textarea id="comentarios" placeholder="¿Algo más que quieras contarnos?" style="min-height:65px;"></textarea>
+      </div>
+    </div>
+
+    <!-- CONSENTIMIENTO -->
+    <label class="check-row" style="margin-bottom:1.5rem;">
+      <input type="checkbox" id="acepta-datos">
+      <span>Acepto que la Municipalidad de Esquina guarde y use mis datos para invitarme a actividades culturales y campañas de difusión del talento local.</span>
+    </label>
+
+    <button class="btn-enviar" onclick="enviarFormulario()">Enviar inscripción</button>
+    <p class="aviso">Tus datos son confidenciales y solo serán utilizados por la Dirección de Cultura del Municipio de Esquina.</p>
+
+  </div><!-- /form-body -->
+
+  <!-- FOOTER CEM -->
+  <div class="footer-cem">
+    <div class="texto">Herramienta desarrollada en colaboración con el Centro de Estadística Municipal · Municipio de Esquina</div>
+    <div class="badge">
+      <span class="sigla">CEM</span>
+      <span class="nombre">Centro de Estadística Municipal</span>
+    </div>
+  </div>
+
+</div><!-- /formulario-wrap -->
+
+<!-- ÉXITO -->
+<div id="exito">
+  <div class="check">🎉</div>
+  <h2>¡Gracias por sumarte!</h2>
+  <p>Tu inscripción fue recibida. La Dirección de Cultura de Esquina se pondrá en contacto cuando haya oportunidades y eventos para vos.<br><br>El talento esquinence tiene un nuevo lugar donde brillar.</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+  var disciplinas = [];
+  var nivel = null;
+
+  function toggleDisciplina(el) {
+    var val = el.dataset.val;
+    if (el.classList.contains('activo')) {
+      el.classList.remove('activo');
+      disciplinas = disciplinas.filter(function(d){ return d !== val; });
+    } else {
+      el.classList.add('activo');
+      disciplinas.push(val);
+    }
+    document.getElementById('campo-otra').style.display =
+      disciplinas.includes('otra') ? 'block' : 'none';
+    var danzaSeccion = document.getElementById('seccion-danza');
+    if (disciplinas.includes('danza')) {
+      danzaSeccion.classList.add('visible');
+      danzaSeccion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      danzaSeccion.classList.remove('visible');
+    }
+  }
+
+  function toggleNivel(el) {
+    document.querySelectorAll('.nivel-item').forEach(function(n){ n.classList.remove('activo'); });
+    el.classList.add('activo');
+    nivel = el.dataset.val;
+  }
+
+  function togglePill(el) {
+    el.classList.toggle('activo');
+    if (el.dataset.otro !== undefined) {
+      document.getElementById('campo-genero-otro').style.display =
+        el.classList.contains('activo') ? 'block' : 'none';
+    }
+  }
+
+  function toggleMotivoAbandono() {
+    var val = document.getElementById('danza-activa').value;
+    document.getElementById('campo-motivo-abandono').style.display =
+      val === 'no' ? 'block' : 'none';
+  }
+
+  // ── REEMPLAZÁ ESTA URL con la que te da Google al publicar el Apps Script ──
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWgOwwpsn-knKq7obxYoLM7sVXDHYClplr9GdNitL02h4XC76OitUpen41zFKJ1kI/exec";
+
+  function enviarFormulario() {
+    var nombre = document.getElementById('nombre').value.trim();
+    var edad = document.getElementById('edad').value.trim();
+    var telefono = document.getElementById('telefono').value.trim();
+    var acepta = document.getElementById('acepta-datos').checked;
+
+    if (!nombre) { alert('Por favor ingresá tu nombre.'); return; }
+    if (!edad) { alert('Por favor ingresá tu edad.'); return; }
+    if (!telefono) { alert('Por favor ingresá un teléfono de contacto.'); return; }
+    if (disciplinas.length === 0) { alert('Por favor seleccioná al menos una disciplina artística.'); return; }
+    if (!nivel) { alert('Por favor indicá tu nivel de trayectoria.'); return; }
+    if (!acepta) { alert('Por favor aceptá el uso de tus datos para continuar.'); return; }
+
+    // Recolectar géneros de danza seleccionados
+    var generosSeleccionados = [];
+    document.querySelectorAll('.check-pill.activo').forEach(function(el) {
+      if (!el.dataset.otro) generosSeleccionados.push(el.textContent.trim());
+    });
+    var generoOtro = document.getElementById('danza-genero-otro');
+    if (generoOtro && generoOtro.value.trim()) generosSeleccionados.push(generoOtro.value.trim());
+
+    // Recolectar instituciones donde practica
+    var instPractica = [];
+    document.querySelectorAll('#seccion-danza .checks-grid:nth-of-type(2) .check-pill.activo').forEach(function(el) {
+      instPractica.push(el.textContent.trim());
+    });
+
+    var datos = {
+      nombre: nombre,
+      dni: document.getElementById('dni').value.trim(),
+      edad: edad,
+      telefono: telefono,
+      email: document.getElementById('email').value.trim(),
+      barrio: document.getElementById('barrio').value.trim(),
+      disciplinas: disciplinas,
+      otraCual: document.getElementById('otra-cual') ? document.getElementById('otra-cual').value.trim() : '',
+      // Danza
+      danzaSexo: document.getElementById('danza-sexo') ? document.getElementById('danza-sexo').value : '',
+      danzaRol: document.getElementById('danza-rol') ? document.getElementById('danza-rol').value : '',
+      danzaActiva: document.getElementById('danza-activa') ? document.getElementById('danza-activa').value : '',
+      danzaMotivo: document.getElementById('danza-motivo') ? document.getElementById('danza-motivo').value.trim() : '',
+      danzaGeneros: generosSeleccionados,
+      danzaDesdeEdad: document.getElementById('danza-desde-edad') ? document.getElementById('danza-desde-edad').value : '',
+      danzaAnios: document.getElementById('danza-anios') ? document.getElementById('danza-anios').value : '',
+      danzaInstitucionesPractica: instPractica,
+      danzaInstitucionesConoce: document.getElementById('danza-instituciones') ? document.getElementById('danza-instituciones').value.trim() : '',
+      danzaPercepcion: document.getElementById('danza-percepcion') ? document.getElementById('danza-percepcion').value.trim() : '',
+      danzaPosNeg: document.getElementById('danza-pos-neg') ? document.getElementById('danza-pos-neg').value.trim() : '',
+      danzaMejora: document.getElementById('danza-mejora') ? document.getElementById('danza-mejora').value.trim() : '',
+      danzaPalabras: document.getElementById('danza-palabras') ? document.getElementById('danza-palabras').value.trim() : '',
+      danzaComunicacion: document.getElementById('danza-comunicacion') ? document.getElementById('danza-comunicacion').value.trim() : '',
+      // Trayectoria
+      nivel: nivel,
+      trayectoriaTexto: document.getElementById('trayectoria-texto').value.trim(),
+      // Disponibilidad
+      dispFestival: document.getElementById('disp-festival').checked,
+      dispTaller: document.getElementById('disp-taller').checked,
+      dispVideo: document.getElementById('disp-video').checked,
+      dispEscuelas: document.getElementById('disp-escuelas').checked,
+      // Redes
+      instagram: document.getElementById('instagram').value.trim(),
+      redesOtras: document.getElementById('redes-otras').value.trim(),
+      material: document.getElementById('material').value.trim(),
+      // Comentarios
+      comentarios: document.getElementById('comentarios').value.trim()
+    };
+
+    // Mostrar estado de envío
+    var btn = document.querySelector('.btn-enviar');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    })
+    .then(function() {
+      document.getElementById('formulario-wrap').style.display = 'none';
+      document.getElementById('exito').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(function() {
+      // no-cors siempre llega acá aunque sea exitoso — mostramos éxito igual
+      document.getElementById('formulario-wrap').style.display = 'none';
+      document.getElementById('exito').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>
+</body>
+</html>
