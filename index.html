@@ -361,7 +361,99 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
       </div>
 
       <!-- CONSENTIMIENTO -->
-      <label class="check-row" style="margin-bottom:20px;">
+      <!-- ESPACIOS DISPONIBLES -->
+      <div class="seccion">
+        <div class="seccion-titulo">¿Tenés un espacio disponible?</div>
+        <div class="campo">
+          <label>¿Contás con algún espacio donde se puedan dar talleres u ofrecer espectáculos? <span class="req">*</span></label>
+          <div class="nivel-grid" style="grid-template-columns:1fr 1fr;">
+            <div class="nivel-item" data-val="si" onclick="toggleEspacio(this)" style="padding:16px 10px;">
+              <span class="emoji">🏛️</span>Sí, tengo un espacio
+            </div>
+            <div class="nivel-item" data-val="no" onclick="toggleEspacio(this)" style="padding:16px 10px;">
+              <span class="emoji">✖️</span>No tengo
+            </div>
+          </div>
+        </div>
+
+        <!-- DETALLE DEL ESPACIO — condicional -->
+        <div id="seccion-espacio" style="display:none; margin-top:16px; background:var(--brand-tint); border:1.5px solid var(--brand-soft); border-radius:var(--radius-md); padding:20px;">
+          <div style="font-family:var(--font-heading);font-weight:900;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-strong);border-bottom:2px solid var(--brand-soft);padding-bottom:8px;margin-bottom:16px;">
+            🏛️ Detalle del espacio
+          </div>
+
+          <div class="campo">
+            <label>Tipo de espacio <small style="font-weight:600;color:var(--ink-400);text-transform:none;letter-spacing:0"> — podés marcar más de uno</small></label>
+            <div class="checks-grid" style="grid-template-columns:repeat(auto-fill,minmax(155px,1fr));">
+              <div class="check-pill" onclick="togglePill(this)">Sala cubierta</div>
+              <div class="check-pill" onclick="togglePill(this)">Salón multiuso</div>
+              <div class="check-pill" onclick="togglePill(this)">Patio / espacio abierto</div>
+              <div class="check-pill" onclick="togglePill(this)">Escenario / tablado</div>
+              <div class="check-pill" onclick="togglePill(this)">Aula</div>
+              <div class="check-pill" onclick="togglePill(this)">Gimnasio</div>
+              <div class="check-pill" data-otro-group="espacio-tipo" onclick="togglePillGroup(this,'espacio-tipo')">Otro</div>
+            </div>
+            <div class="campo" id="campo-otro-espacio-tipo" style="display:none;margin-top:10px;">
+              <input type="text" id="otro-espacio-tipo-cual" placeholder="¿Qué tipo de espacio?">
+            </div>
+          </div>
+
+          <div class="fila-2">
+            <div class="campo">
+              <label>Capacidad aproximada</label>
+              <select id="espacio-capacidad">
+                <option value="">Seleccioná una opción</option>
+                <option>Hasta 20 personas</option>
+                <option>Entre 20 y 50 personas</option>
+                <option>Entre 50 y 100 personas</option>
+                <option>Entre 100 y 200 personas</option>
+                <option>Más de 200 personas</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label>Barrio o ubicación del espacio</label>
+              <input type="text" id="espacio-barrio" placeholder="Barrio o dirección aproximada">
+            </div>
+          </div>
+
+          <div class="campo">
+            <label>¿Qué equipamiento tiene? <small style="font-weight:600;color:var(--ink-400);text-transform:none;letter-spacing:0"> — marcá lo que aplique</small></label>
+            <div class="checks-grid" style="grid-template-columns:repeat(auto-fill,minmax(155px,1fr));">
+              <div class="check-pill" onclick="togglePill(this)">Sillas / butacas</div>
+              <div class="check-pill" onclick="togglePill(this)">Equipo de sonido</div>
+              <div class="check-pill" onclick="togglePill(this)">Iluminación escénica</div>
+              <div class="check-pill" onclick="togglePill(this)">Proyector / pantalla</div>
+              <div class="check-pill" onclick="togglePill(this)">Espejos (danza)</div>
+              <div class="check-pill" onclick="togglePill(this)">Baños</div>
+              <div class="check-pill" onclick="togglePill(this)">Estacionamiento</div>
+              <div class="check-pill" onclick="togglePill(this)">Acceso para personas con discapacidad</div>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label>¿El espacio podría estar disponible para el municipio?</label>
+            <select id="espacio-disponibilidad">
+              <option value="">Seleccioná una opción</option>
+              <option>Sí, de forma gratuita</option>
+              <option>Sí, con un costo a convenir</option>
+              <option>Depende la actividad, conversemos</option>
+              <option>Por ahora no, pero en el futuro quizás</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>Días y horarios disponibles</label>
+            <input type="text" id="espacio-horarios" placeholder="Ej: lunes y miércoles de tarde, fines de semana…">
+          </div>
+
+          <div class="campo">
+            <label>Comentarios sobre el espacio</label>
+            <textarea id="espacio-comentarios" placeholder="Cualquier detalle que nos ayude a entender el espacio…" style="min-height:65px;"></textarea>
+          </div>
+        </div>
+      </div>
+
+            <label class="check-row" style="margin-bottom:20px;">
         <input type="checkbox" id="acepta-datos">
         <span>Acepto que la Municipalidad de Esquina guarde y use mis datos para invitarme a actividades culturales y campañas de difusión del talento local.</span>
       </label>
@@ -508,6 +600,21 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
 
   function togglePill(el) { el.classList.toggle('activo'); }
 
+  var espacioVal = null;
+
+  function toggleEspacio(el) {
+    document.querySelectorAll('.nivel-grid .nivel-item[data-val="si"], .nivel-grid .nivel-item[data-val="no"]').forEach(function(n){
+      if (n === el) return;
+      // only deselect siblings in the same grid
+    });
+    // find siblings
+    var grid = el.parentElement;
+    grid.querySelectorAll('.nivel-item').forEach(function(n){ n.classList.remove('activo'); });
+    el.classList.add('activo');
+    espacioVal = el.dataset.val;
+    document.getElementById('seccion-espacio').style.display = espacioVal === 'si' ? 'block' : 'none';
+  }
+
   function toggleMotivoAbandono() {
     document.getElementById('campo-motivo-abandono').style.display = document.getElementById('danza-activa').value === 'no' ? 'block' : 'none';
   }
@@ -572,7 +679,25 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
       instagram: document.getElementById('instagram').value.trim(),
       redesOtras: document.getElementById('redes-otras').value.trim(),
       material: document.getElementById('material').value.trim(),
-      comentarios: document.getElementById('comentarios').value.trim()
+      comentarios: document.getElementById('comentarios').value.trim(),
+      espacioDisponible: espacioVal || '',
+      espacioTipos: (function(){
+        var v=[];
+        document.querySelectorAll('#seccion-espacio .checks-grid:first-of-type .check-pill.activo').forEach(function(el){ if(!el.dataset.otroGroup) v.push(el.textContent.trim()); });
+        var otro = document.getElementById('otro-espacio-tipo-cual');
+        if(otro && otro.value.trim()) v.push(otro.value.trim());
+        return v;
+      })(),
+      espacioCapacidad: document.getElementById('espacio-capacidad') ? document.getElementById('espacio-capacidad').value : '',
+      espacioBarrio: document.getElementById('espacio-barrio') ? document.getElementById('espacio-barrio').value.trim() : '',
+      espacioEquipamiento: (function(){
+        var v=[];
+        document.querySelectorAll('#seccion-espacio .checks-grid:last-of-type .check-pill.activo').forEach(function(el){ v.push(el.textContent.trim()); });
+        return v;
+      })(),
+      espacioDisponibilidadMunicipio: document.getElementById('espacio-disponibilidad') ? document.getElementById('espacio-disponibilidad').value : '',
+      espacioHorarios: document.getElementById('espacio-horarios') ? document.getElementById('espacio-horarios').value.trim() : '',
+      espacioComentarios: document.getElementById('espacio-comentarios') ? document.getElementById('espacio-comentarios').value.trim() : ''
     };
     var btn = document.querySelector('.btn-enviar'); btn.textContent = 'Enviando...'; btn.disabled = true;
     fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) })
