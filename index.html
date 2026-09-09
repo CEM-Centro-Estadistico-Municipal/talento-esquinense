@@ -202,6 +202,7 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
           <div class="disciplina-item" data-val="artesania" onclick="toggleDisciplina(this)"><span class="icono">🪱</span> Artesanía</div>
           <div class="disciplina-item" data-val="murga" onclick="toggleDisciplina(this)"><span class="icono">🥁</span> Murga / Percusión</div>
           <div class="disciplina-item" data-val="folklore" onclick="toggleDisciplina(this)"><span class="icono">🪷</span> Folklore</div>
+          <div class="disciplina-item" data-val="gastronomia" onclick="toggleDisciplina(this)"><span class="icono">🍲</span> Gastronomía típica</div>
           <div class="disciplina-item" data-val="otra" onclick="toggleDisciplina(this)"><span class="icono">✨</span> Otra</div>
         </div>
         <div class="campo" id="campo-otra" style="display:none;margin-top:10px;"><label>¿Qué otra expresión?</label><input type="text" id="otra-cual" placeholder="Describí tu disciplina"></div>
@@ -510,6 +511,7 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
     toggleVisible('sub-danza', disciplinas.includes('danza'));
     toggleVisible('sub-teatro', disciplinas.includes('teatro'));
     toggleVisible('sub-escritura', disciplinas.includes('escritura'));
+    toggleVisible('sub-gastronomia', disciplinas.includes('gastronomia'));
     var danzaSeccion = document.getElementById('seccion-danza');
     if (disciplinas.includes('danza')) { danzaSeccion.classList.add('visible'); danzaSeccion.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
     else { danzaSeccion.classList.remove('visible'); }
@@ -527,6 +529,7 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
     artesania: { emoji: '🪡', label: 'Artesanía' },
     murga: { emoji: '🥁', label: 'Murga / Percusión' },
     folklore: { emoji: '🪗', label: 'Folklore' },
+    gastronomia: { emoji: '🍲', label: 'Gastronomía típica' },
     otra: { emoji: '✨', label: 'Otra expresión' }
   };
 
@@ -655,6 +658,11 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
       otroTeatro: document.getElementById('otro-teatro-cual').value.trim(),
       tipoEscritura: getPillValues('grid-escritura'),
       otroEscritura: document.getElementById('otro-escritura-cual').value.trim(),
+      tipoGastronomia: getPillValues('grid-gastronomia'),
+      otroGastronomia: document.getElementById('otro-gastronomia-cual') ? document.getElementById('otro-gastronomia-cual').value.trim() : '',
+      gastronomiaActiva: document.getElementById('gastronomia-activa') ? document.getElementById('gastronomia-activa').value : '',
+      gastronomiaFerias: document.getElementById('gastronomia-ferias') ? document.getElementById('gastronomia-ferias').value : '',
+      gastronomiaReceta: document.getElementById('gastronomia-receta') ? document.getElementById('gastronomia-receta').value.trim() : '',
       danzaSexo: document.getElementById('danza-sexo').value,
       danzaRol: document.getElementById('danza-rol').value,
       danzaActiva: document.getElementById('danza-activa').value,
